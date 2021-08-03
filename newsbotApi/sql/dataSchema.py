@@ -3,6 +3,21 @@ from datetime import date
 from typing import Optional
 from uuid import uuid4
 
+class ArticlesV2():
+    id: str
+    sourceId: str
+    tags: Optional[str]
+    title: Optional[str]
+    url: Optional[str]
+    pubDate: Optional[date]
+    video: Optional[str]
+    videoHeight: Optional[int]
+    videoWidth: Optional[int]
+    thumbnail: Optional[str]
+    description: Optional[str]
+    authorName: Optional[str]
+    authorImage: Optional[str]
+
 class Articles(BaseModel):
     id: Optional[str] 
     siteName: Optional[str]
@@ -22,6 +37,14 @@ class Articles(BaseModel):
 
     class Config:
         orm_mode = True
+
+class DiscordQueueV2():
+    id: str
+    articleId: Articles
+
+    # search for the articleId
+    # then search the article for the sourceId
+    # Take the sourceId and search DiscordLinks for the links between discord and sources
 
 class DiscordQueue(BaseModel):
     id: str
@@ -94,10 +117,20 @@ class Sources(BaseModel):
     tags: Optional[str]
     fromEnv: bool
 
+class DiscordLinks():
+    """
+    This class is a table that shows how a DiscordWebHook links back to a Source object.
+    """
+    id: str
+    sourceId: str
+    discordId: str
+
 class SourceLinks(BaseModel):
     id: Optional[str]
     sourceID: Optional[str]
     sourceType: Optional[str]
     sourceName: Optional[str]
+    #sourceData: Optional[Sources]
     discordName: Optional[str]
     discordID: Optional[str]
+    #discordData: Optional[DiscordWebHooks]

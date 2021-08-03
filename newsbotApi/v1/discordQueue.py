@@ -7,7 +7,8 @@ from newsbotApi.sql.sqlSchema import DiscordQueue as SqlDiscordQueue
 from newsbotApi.sql.dataSchema import DiscordQueue as DataDiscordQueue
 
 router = APIRouter(
-    prefix='/v1/discordqueue'
+    prefix='/v1/discordqueue',
+    tags=['DiscordQueue']
 )
 
 @router.get('/get/all')

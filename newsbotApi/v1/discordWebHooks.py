@@ -7,12 +7,43 @@ from newsbotApi.sql.sqlSchema import DiscordWebHooks as sql
 from newsbotApi.sql.dataSchema import DiscordWebHooks as data
 
 router = APIRouter(
-    prefix='/v1/discordwebhooks'
+    prefix='/v1/discordwebhooks',
+    tags=['DiscordWebHooks']
 )
 
 @router.get('/get/all')
 def getAll() -> List[sql]:
     res = db.session.query(sql).all()
+    db.session.close()
+    return res
+
+@router.get('/get/all/byName')
+def getAllByName(name: str) -> sql:
+    res = db.session.query(sql).filter(sql.name == name).all()
+    db.session.close()
+    return res
+
+@router.get('/get/byId')
+def getById(id: str) -> sql:
+    res = db.session.query(sql).filter(sql.id == id).first()
+    db.session.close()
+    return res
+
+@router.get('/get/byName')
+def getByName(name: str) -> sql:
+    res = db.session.query(sql).filter(sql.name == name).first()
+    db.session.close()
+    return res
+
+@router.get('/get/byUrl')
+def getByName(url: str) -> sql:
+    res = db.session.query(sql).filter(sql.url == url).first()
+    db.session.close()
+    return res
+
+@router.get('/get/byServer')
+def getByName(name: str) -> sql:
+    res = db.session.query(sql).filter(sql.name == name).first()
     db.session.close()
     return res
 
@@ -23,7 +54,22 @@ def add(item:data) -> BaseMessage:
     db.session.commit()
     db.session.close()
 
-@router.get('/get/all/byName')
-def getAllByName(name: str) -> sql:
-    res = db.session.query(sql).filter(sql.name == name)
-    
+@router.post('/update/byId')
+def updateById(id: str, item: data) -> None:
+    res = db.session.query(sql).filter(sql.id == id).first()
+    res.name = item.name
+    res.key = item.key
+    res.url = item.url
+    res.server = item.server
+    res.channel = item.channel
+    res.enabled = item.enabled
+    res.fromEnv = item.fromEnv
+    db.session.add(res)
+    db.session.commit()
+
+@router.delete('/delete/byId')
+def deleteById(id: str) -> None:
+    res = db.session.query(sql).filter(sql.id == id).all()
+    db.session.delete(res)
+    db.session.commit()
+    db.session.flush()

@@ -2,6 +2,7 @@ version: '3'
 
 networks:
   newsbotDev:
+    external: true
 
 services:
   app:
@@ -18,6 +19,8 @@ services:
       
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+    ports:
+      - "8000:8000"
     networks: 
       - newsbotDev
     

@@ -56,6 +56,24 @@ class Articles(Base):
         self.authorName = authorName
         self.authorImage = authorImage
 
+    def convertFromData(self, item: object) -> object:
+        a = Articles()
+        a.siteName = item.siteName
+        a.sourceName = item.sourceName
+        a.sourceType = item.sourceType
+        a.tags = item.tags
+        a.title = item.title
+        a.url = item.url
+        a.pubDate = item.pubDate
+        a.video = item.video
+        a.videoHeight = item.videoHeight
+        a.videoWidth = item.videoWidth
+        a.thumbnail = item.thumbnail
+        a.description = item.description
+        a.authorName = item.authorName
+        a.authorImage = item.authorImage
+        return a
+
 class DiscordQueue(Base):
     __tablename__ = "discordQueue"
     id = Column(String, primary_key=True)
@@ -128,6 +146,8 @@ class DiscordWebHooks(Base):
 
     def convertFromData(self, data:object) -> None:
         res = DiscordWebHooks()
+        if data.id != '':
+            res.id = data.id
         res.name = data.name
         res.key = data.key
         res.url = data.url
@@ -151,6 +171,13 @@ class Icons(Base):
         self.id = str(uuid.uuid4())
         self.filename = fileName
         self.site = site
+
+    def convertFromData(self, data:object) -> object:
+        res = Icons(
+            fileName=data.filename,
+            site=data.site
+        )
+        return res
 
 class Logs(Base):
     __tablename__ = "logs"
@@ -186,6 +213,14 @@ class Settings(Base):
         self.options = options
         self.notes = notes
 
+    def convertFromData(self, item:object) -> object:
+        res = Settings()
+        res.key = item.key
+        res.notes = item.notes
+        res.options = item.options
+        res.value = item.value
+        return res
+
 class Sources(Base):
     __tablename__ = "sources"
     id: str = Column(String, primary_key=True)
@@ -210,8 +245,7 @@ class Sources(Base):
         tags: str = "",
         fromEnv: bool = False
     ) -> None:
-        if id == "": self.id: str = str(uuid.uuid4())
-        else: self.id = id
+        self.id = str(uuid.uuid4())
         self.name: str = name
         self.source: str = source
         self.type: str = type
@@ -220,6 +254,18 @@ class Sources(Base):
         self.url: str = url
         self.tags: str = tags
         self.fromEnv: bool = fromEnv
+
+    def convertFromData(self, item:object) -> object:
+        s = Sources()
+        s.name = item.name 
+        s.source = item.source
+        s.type = item.type
+        s.value = item.value
+        s.enabled = item.enabled
+        s.url = item.url
+        s.tags = item.tags
+        s.fromEnv = item.fromEnv
+        return s
 
 class SourceLinks(Base):
     __tablename__ = "sourcelinks"
@@ -236,7 +282,15 @@ class SourceLinks(Base):
         self.sourceID = sourceID
         self.sourceType = sourceType
         self.sourceName = sourceName
+        #self.sourceData = Source
         self.discordID = discordID
         self.discordName = discordName
 
-
+    def convertFromData(self, item:object) -> object:
+        s = SourceLinks()
+        s.sourceID = item.sourceID
+        s.sourceType = item.sourceType
+        s.sourceName = item.sourceName
+        s.discordID = item.discordID
+        s.discordName = item.discordName
+        return s
