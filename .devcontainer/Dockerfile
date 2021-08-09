@@ -1,9 +1,10 @@
-FROM python:3.8-slim-buster
+FROM python:3.9-slim-buster
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 COPY . /app
 WORKDIR /app
+RUN pip3 install pipenv
 RUN pip3 install -r requirements.txt
 RUN echo deb http://deb.debian.org/debian/ unstable main contrib non-free >> /etc/apt/sources.list && \
 	apt-get update && export DEBIAN_FRONTEND=noninteractive \
