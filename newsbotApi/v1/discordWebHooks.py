@@ -47,6 +47,21 @@ def getByName(name: str) -> sql:
     db.session.close()
     return res
 
+@router.get('/find')
+def find(item:data) -> sql:
+    res = db.session.query(sql) \
+        .filter(sql.server == item.server) \
+        .filter(sql.channel == item.channel) \
+        .filter(sql.url == item.url) \
+        .first()
+    db.session.close()
+    if res == None:
+        b = sql()
+        b.id = ''
+        return b
+    else:
+        return res
+
 @router.post('/add')
 def add(item:data) -> BaseMessage:
     a = sql().convertFromData(item)
@@ -56,7 +71,9 @@ def add(item:data) -> BaseMessage:
 
 @router.post('/update/byId')
 def updateById(id: str, item: data) -> None:
-    res = db.session.query(sql).filter(sql.id == id).first()
+    res = db.session.query(sql) \
+        .filter(sql.id == id) \
+        .first()
     res.name = item.name
     res.key = item.key
     res.url = item.url

@@ -10,3 +10,4 @@ The API that supports news Newsbot application.  The API is required for the wor
 | ---    | --- |
 | Fix | First release of the API |
 | New | Tables have been migrated to the API as is. |
+| Update | Bumped to python 3.9 |

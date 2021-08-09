@@ -78,8 +78,8 @@ def getByNameAndType(name: str, source:str, type: str) -> sql:
     db.session.close()
     return res
 
-@router.get('/exists')
-def exists(item: data) -> sql:
+@router.get('/find')
+def find(item: data) -> sql:
     res = db.session.query(sql) \
         .filter(sql.name == item.name) \
         .filter(sql.type == item.type) \

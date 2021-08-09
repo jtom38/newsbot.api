@@ -15,7 +15,7 @@ def getAll() -> List[sql]:
     db.session.close()
     return res
 
-@router.get('/getSingleById')
+@router.get('/get/byId')
 def getById(id: str) -> sql:
     """
     Returns a single Article, by ID.
@@ -37,6 +37,19 @@ def urlExists(url: str) -> bool:
             return {"exists": True}
     except:
         return {"exists": False}
+
+@router.get('/find')
+def find(item: data) -> sql:
+    res = db.session.query(sql) \
+        .filter(sql.url == item.url) \
+        .first()
+    db.session.close()
+    if res == None:
+        b = sql()
+        b.id = ''
+        return b
+    else: 
+        return res
 
 @router.post('/add')
 def add(item:data) -> None:

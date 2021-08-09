@@ -44,9 +44,23 @@ def add(item: data) -> None:
     db.session.commit()
     db.session.close()
 
+@router.post('/update/byId')
+def update(id: str, item: data) -> None:
+    res = db.session.query(sql) \
+        .filter(sql.id == id) \
+        .first()
+    res.key = item.key
+    res.value = item.value
+    res.options = item.options
+    res.notes = item.notes
+    db.session.add(res)
+    db.session.close()
+
 @router.delete('/delete/byId')
 def delete(id: str) -> None:
-    res = db.session.query(sql).filter(sql.id == id).first()
+    res = db.session.query(sql) \
+        .filter(sql.id == id) \
+        .first()
     db.session.delete(res)
     db.session.commit()
     db.session.close()
