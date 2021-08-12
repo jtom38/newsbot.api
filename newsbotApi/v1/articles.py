@@ -25,18 +25,18 @@ def getById(id: str) -> sql:
     return res
 
 @router.get('/urlExists')
-def urlExists(url: str) -> bool:
+def urlExists(url: str) -> sql:
     """
     Checks the DB to see if the requested url can be found in the table
     """
-    res = db.session.query(sql).filter(sql.url == url)
-    try:
-        if (len(res) == 0):
-            return {"exists": False}
-        else:
-            return {"exists": True}
-    except:
-        return {"exists": False}
+    res = db.session.query(sql).filter(sql.url == url).first()
+    db.session.close()
+    if res == None:
+        a = sql()
+        a.id =''
+        return a
+    else:
+        return res
 
 @router.get('/find')
 def find(item: data) -> sql:

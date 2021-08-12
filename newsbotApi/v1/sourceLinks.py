@@ -24,7 +24,7 @@ def getAllBySourceName(sourceName: str) -> List[sql]:
     return res
 
 @router.get('/get/all/bySourceType')
-def getAllBySourceName(sourceType: str) -> List[sql]:
+def getAllBySourceType(sourceType: str) -> List[sql]:
     res = db.session.query(sql).filter(sql.sourceType == sourceType).first()
     db.session.close()
     return res
@@ -60,9 +60,15 @@ def getAllBySourceNameAndSourceTypeAndDiscordName(sourceName:str, sourceType:str
     db.session.close()
     return res
 
+@router.get('/get/bySourceId')
+def getBySourceId(sourceId: str) -> List[sql]:
+    res = db.session.query(sql).filter(sql.sourceID == sourceId).first()
+    db.session.close()
+    return res
+
 @router.get('/get/all/bySourceName')
-def getAllBySourceName(sourceId: str) -> List[sql]:
-    res = db.session.query(sql).filter(sql.sourceName == sourceId).first()
+def getAllBySourceName(sourceName: str) -> List[sql]:
+    res = db.session.query(sql).filter(sql.sourceName == sourceName).first()
     db.session.close()
     return res
 
