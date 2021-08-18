@@ -3,9 +3,9 @@ from datetime import date
 from typing import Optional
 from uuid import uuid4
 
-class ArticlesV2():
+class Articles(BaseModel):
     id: str
-    sourceId: str
+    sourceId: Optional[str]
     tags: Optional[str]
     title: Optional[str]
     url: Optional[str]
@@ -18,7 +18,13 @@ class ArticlesV2():
     authorName: Optional[str]
     authorImage: Optional[str]
 
-class Articles(BaseModel):
+    class Config:
+        orm_mode = True
+
+class ArticlesV1(BaseModel):
+    """
+    This model was phased out in 0.8.0
+    """
     id: Optional[str] 
     siteName: Optional[str]
     sourceName: Optional[str]
@@ -38,15 +44,24 @@ class Articles(BaseModel):
     class Config:
         orm_mode = True
 
-class DiscordQueueV2():
+class DiscordQueue(BaseModel):
+    """
+    This was added in 0.8.0
+    """
     id: str
-    articleId: Articles
+    articleId: str
 
     # search for the articleId
     # then search the article for the sourceId
     # Take the sourceId and search DiscordLinks for the links between discord and sources
 
-class DiscordQueue(BaseModel):
+    class Config:
+        orm_mode = True
+
+class DiscordQueueV1(BaseModel):
+    """
+    This model was phased out in 0.8.0
+    """
     id: str
     siteName: Optional[str]
     title: Optional[str]
@@ -108,6 +123,7 @@ class Settings(BaseModel):
 
 class Sources(BaseModel):
     id: Optional[str]
+    site: Optional[str]
     name: Optional[str]
     source: Optional[str]
     type: Optional[str]
@@ -117,6 +133,9 @@ class Sources(BaseModel):
     tags: Optional[str]
     fromEnv: bool
 
+    class Config:
+        orm_mode = True
+
 class DiscordLinks():
     """
     This class is a table that shows how a DiscordWebHook links back to a Source object.
@@ -124,6 +143,9 @@ class DiscordLinks():
     id: str
     sourceId: str
     discordId: str
+
+    class Config:
+        orm_mode = True
 
 class SourceLinks(BaseModel):
     id: Optional[str]
@@ -134,3 +156,6 @@ class SourceLinks(BaseModel):
     discordName: Optional[str]
     discordID: Optional[str]
     #discordData: Optional[DiscordWebHooks]
+
+    class Config:
+        orm_mode = True

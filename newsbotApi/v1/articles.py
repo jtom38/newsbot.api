@@ -20,7 +20,9 @@ def getById(id: str) -> sql:
     """
     Returns a single Article, by ID.
     """
-    res = db.session.query(sql).filter(sql.id == id)
+    res = db.session.query(sql) \
+        .filter(sql.id == id) \
+        .first()
     db.session.close()
     return res
 
@@ -29,7 +31,9 @@ def urlExists(url: str) -> sql:
     """
     Checks the DB to see if the requested url can be found in the table
     """
-    res = db.session.query(sql).filter(sql.url == url).first()
+    res = db.session.query(sql) \
+        .filter(sql.url == url) \
+        .first()
     db.session.close()
     if res == None:
         a = sql()
@@ -52,7 +56,7 @@ def find(item: data) -> sql:
         return res
 
 @router.post('/add')
-def add(item:data) -> None:
+def add(item:data) -> sql:
     a = sql().convertFromData(item)
     db.session.add(a)
     db.session.commit()

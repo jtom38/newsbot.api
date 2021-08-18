@@ -1,4 +1,4 @@
-"""update sources table
+"""0.8.0 Changes
 
 Revision ID: c77ad08fa772
 Revises: 1e72dcb284c9
@@ -21,11 +21,11 @@ def upgrade():
     # dropping it so we can rebuild it.
     # This is not a user table as is and all values are generated from env or soon, ui
     drop_table("sources")
-
     create_table(
         "sources",
         Column("id", String, primary_key=True),
-        Column("name", String),
+        Column('site', String),
+        Column('name', String),
         Column("source", String),
         Column("type", String),
         Column("value", String),
@@ -35,10 +35,17 @@ def upgrade():
         Column("fromEnv", Boolean)
     )
 
-    add_column("Articles", Column("sourceType", String()))
-    add_column("Articles", Column("sourceName", String()))
-    add_column("discordQueue", Column("sourceType", String()))
-    add_column("discordQueue", Column("sourceName", String()))
+    # table is rebuilt to support an ID and a link to the article
+    drop_table('DiscordQueue')
+    create_table(
+        'discordQueue',
+        Column("id", String, primary_key=True),
+        Column('articleId', String)
+    )
+
+    # sourceId helps track what this source is alerted to this feed
+    add_column("Articles", Column('sourceId', String()))
+
     add_column("discordwebhooks", Column("fromEnv", Boolean()))  
 
 def downgrade():

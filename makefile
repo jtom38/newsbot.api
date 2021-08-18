@@ -7,18 +7,11 @@ test: ## Runs unit tests
 	alembic upgrade head
 	pytest
 
-test-cleanup:  ## Use this to clean up the db when the test fails
-	rm ./mounts/database/newsbot.db
-	mv ./mounts/database/test.newsbot.db ./mounts/database/newsbot.db
-
 test-ci: ## Runs unit tests without an existing db on disk. Ideal for CI/CD
 	alembic upgrade head
 	pytest
 
 refresh: ## Removes temp data for a clean start
-	rm ./newsbot.api.db
-
-rmdatabase:
 	rm ./newsbot.api.db
 
 docker-build: ## Build docker image

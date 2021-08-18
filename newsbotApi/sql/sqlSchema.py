@@ -1,16 +1,13 @@
 import uuid
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.types import Date
-from pydantic import BaseModel
 from newsbotApi.sql.database import Base
 from newsbotApi.common.constant import SourceName, SourceType
 
 class Articles(Base):
     __tablename__ = "articles"
     id = Column(String, primary_key=True)
-    siteName = Column(String)
-    sourceName = Column(String)
-    sourceType = Column(String)
+    sourceId: str = Column(String)
     tags = Column(String)
     title = Column(String)
     url = Column(String)
@@ -25,9 +22,7 @@ class Articles(Base):
 
     def __init__(
         self,
-        siteName: str = "",
-        sourceType: str = "",
-        sourceName: str = "",
+        sourceId: str = '',
         tags: str = "",
         title: str = "",
         url: str = "",
@@ -41,9 +36,7 @@ class Articles(Base):
         authorImage: str = "",
     ) -> None:
         self.id = str(uuid.uuid4())
-        self.siteName = siteName
-        self.sourceName = sourceName
-        self.sourceType = sourceType
+        self.sourceId = sourceId
         self.tags = tags
         self.title = title
         self.url = url
@@ -58,9 +51,7 @@ class Articles(Base):
 
     def convertFromData(self, item: object) -> object:
         a = Articles()
-        a.siteName = item.siteName
-        a.sourceName = item.sourceName
-        a.sourceType = item.sourceType
+        a.sourceId = item.sourceId
         a.tags = item.tags
         a.title = item.title
         a.url = item.url
@@ -77,19 +68,33 @@ class Articles(Base):
 class DiscordQueue(Base):
     __tablename__ = "discordQueue"
     id = Column(String, primary_key=True)
-    siteName = Column(String)
-    title = Column(String)
-    link = Column(String)
-    tags = Column(String)
-    thumbnail = Column(String)
-    description = Column(String)
-    video = Column(String)
-    videoHeight = Column(Integer)
-    videoWidth = Column(Integer)
-    authorName = Column(String)
-    authorImage = Column(String)
-    sourceName = Column(String)
-    sourceType = Column(String)
+    articleId: str = Column(String)
+
+    def __init__(self) -> None:
+        self.id = str(uuid.uuid4())
+
+    def convertFromData(self, data:object) -> None:
+        res = DiscordQueue()
+        res.articleId = data.articleId
+        return res
+
+class DiscordQueueV1():
+    __tablename__ = "discordQueue"
+    id = Column(String, primary_key=True)
+    articlesId: str
+    #siteName = Column(String)
+    #title = Column(String)
+    #link = Column(String)
+    #tags = Column(String)
+    #thumbnail = Column(String)
+    #description = Column(String)
+    #video = Column(String)
+    #videoHeight = Column(Integer)
+    #videoWidth = Column(Integer)
+    #authorName = Column(String)
+    #authorImage = Column(String)
+    #sourceName = Column(String)
+    #sourceType = Column(String)
 
     def __init__(self) -> None:
         self.id = str(uuid.uuid4())
@@ -224,6 +229,7 @@ class Settings(Base):
 class Sources(Base):
     __tablename__ = "sources"
     id: str = Column(String, primary_key=True)
+    site: str = Column(String)
     name: str = Column(String)
     source: str = Column(String)
     type: str = Column(String)
@@ -236,6 +242,7 @@ class Sources(Base):
     def __init__(
         self,
         id: str = "",
+        site: str = "",
         name: str = "",
         source: str = "",
         type: str = "",
@@ -246,6 +253,7 @@ class Sources(Base):
         fromEnv: bool = False
     ) -> None:
         self.id = str(uuid.uuid4())
+        self.site: str = site
         self.name: str = name
         self.source: str = source
         self.type: str = type
@@ -257,6 +265,7 @@ class Sources(Base):
 
     def convertFromData(self, item:object) -> object:
         s = Sources()
+        s.site = item.site
         s.name = item.name 
         s.source = item.source
         s.type = item.type
