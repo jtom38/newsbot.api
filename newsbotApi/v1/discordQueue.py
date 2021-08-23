@@ -24,10 +24,19 @@ def add(item: data) -> None:
     db.session.commit()
     db.session.close()
 
+@router.get("/get/byId")
+def getById(id: str) -> sql:
+    res = db.session.query(sql) \
+        .filter(sql.id == id) \
+        .first()
+    db.session.close()
+    return res
+
 @router.delete('/delete/id')
 def deleteById(id: str) -> None:
     res = db.session.query(sql)\
-        .filter(sql.id == id)
+        .filter(sql.id == id) \
+        .first()
     db.session.delete(res)
     db.session.commit()
     db.session.close()

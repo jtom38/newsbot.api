@@ -184,23 +184,6 @@ class Icons(Base):
         )
         return res
 
-class Logs(Base):
-    __tablename__ = "logs"
-    id = Column("id", String, primary_key=True)
-    date = Column("date", String)
-    time = Column("time", String)
-    type = Column("type", String)
-    caller = Column("caller", String)
-    message = Column("message", String)
-
-    def __init__(self, date: str, time: str, type: str, caller: str, message: str):
-        self.id = str(uuid.uuid4())
-        self.date = date
-        self.time = time
-        self.type = type
-        self.caller = caller
-        self.message = message
-
 class Settings(Base):
     __tablename__ = "settings"
     id = Column("id", String, primary_key=True)

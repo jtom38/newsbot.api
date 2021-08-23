@@ -100,17 +100,6 @@ class Icons(BaseModel):
     class Config:
         orm_mode = True
 
-class Logs(BaseModel):
-    id: Optional[str]
-    date: Optional[str]
-    time: Optional[str]
-    type: Optional[str]
-    caller: Optional[str]
-    message: Optional[str]
-
-    class Config:
-        orm_mode = True
-
 class Settings(BaseModel):
     id: Optional[str]
     key: Optional[str]
