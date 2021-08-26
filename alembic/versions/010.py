@@ -5,7 +5,7 @@ Revises: 1e72dcb284c9
 Create Date: 2021-04-04 15:48:07.364376
 
 """
-from alembic.op import add_column, drop_column, create_table, drop_table
+from alembic.op import create_table
 from sqlalchemy import Column, String, Boolean, Integer
 
 # revision identifiers, used by Alembic.
@@ -90,6 +90,7 @@ def upgrade():
         Column("discordID", String),
         Column('discordName', String),
     )
+
 
 def downgrade():
     pass

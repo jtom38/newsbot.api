@@ -2,6 +2,10 @@
 help: ## Shows this help command
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
+lint: ## Run flake8 against the project
+	
+	flake8 --ignore E501,F401 ./newsbotApi
+
 test: ## Runs unit tests
 	NEWSBOT_MODE='unittest'
 	alembic upgrade head

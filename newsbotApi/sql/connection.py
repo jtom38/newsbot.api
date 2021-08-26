@@ -1,9 +1,11 @@
 from os import getenv
 from enum import Enum
 
+
 class ConnectionStringTypes(Enum):
     SQLITE = 'sqlite'
     POSTGRES = 'postgres'
+
 
 class ConnectionStringModes(Enum):
     """
@@ -13,6 +15,7 @@ class ConnectionStringModes(Enum):
     DEV = 'dev'     # Used for local development
     TEST = 'test'   # Used for unit tests
     PROD = 'prod'   # Used for production databases
+
 
 class ConnectionString():
     """
@@ -31,19 +34,19 @@ class ConnectionString():
     __defaultType__: ConnectionStringTypes = ConnectionStringTypes.SQLITE
     __defaultName__: str = 'newsbot'
     __defaultPath__: str = "/mounts/database"
-    
+
     __dbEnv__: str = ''
     __dbMode__: str = ''
 
     # Used with SQLite
     __dbName__: str = ''
     __dbPath__: str = ''
-    
+
     # Used for Postgres
     __dbUsername__: str = ''
     __dbPassword__: str = ''
     __dbHost__: str = ''
-    
+
     def __init__(self) -> None:
         self.__dbName__ = self.readEnvName()
         self.__dbEnv__ = self.readEnvMode()
@@ -54,10 +57,10 @@ class ConnectionString():
             self.__dbPassword__ = str(getenv("NEWSBOT_DATABASE_PASSWORD"))
             self.__dbHost__ = str(getenv("NEWSBOT_DATABASE_HOST"))
             pass
-        
+
         if self.__dbType__ == ConnectionStringTypes.SQLITE:
-            self.__dbPath__ = self.readEnvDbPath()    
-            
+            self.__dbPath__ = self.readEnvDbPath()
+
         self.value: str = self.getConnectionString()
 
     def readEnvName(self) -> str:
@@ -91,7 +94,7 @@ class ConnectionString():
         res = str(getenv("NEWSBOT_SQLITE_PATH"))
         if res == "None":
             return self.__defaultPath__
-        else: 
+        else:
             return res
 
     def getConnectionString(self) -> str:
@@ -99,7 +102,7 @@ class ConnectionString():
             res = "sqlite://ReplacePath"
             path = f"{self.__dbPath__}/{self.__dbName__}.db"
             res = res.replace("ReplacePath", path)
-            #print(f"Setting connection string to: {res}")
+            # print(f"Setting connection string to: {res}")
             return res
 
         elif self.__dbType__ == ConnectionStringTypes.POSTGRES:
@@ -111,4 +114,3 @@ class ConnectionString():
             return res
         else:
             raise Exception("Invalid database type given.")
- 

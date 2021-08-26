@@ -9,11 +9,13 @@ router = APIRouter(
     tags=['Articles']
 )
 
+
 @router.get('/getAll')
 def getAll() -> List[sql]:
     res = db.session.query(sql).all()
     db.session.close()
     return res
+
 
 @router.get('/get/byId')
 def getById(id: str) -> sql:
@@ -26,6 +28,7 @@ def getById(id: str) -> sql:
     db.session.close()
     return res
 
+
 @router.get('/urlExists')
 def urlExists(url: str) -> sql:
     """
@@ -35,12 +38,13 @@ def urlExists(url: str) -> sql:
         .filter(sql.url == url) \
         .first()
     db.session.close()
-    if res == None:
+    if res is None:
         a = sql()
-        a.id =''
+        a.id = ''
         return a
     else:
         return res
+
 
 @router.get('/find')
 def find(item: data) -> sql:
@@ -48,15 +52,16 @@ def find(item: data) -> sql:
         .filter(sql.url == item.url) \
         .first()
     db.session.close()
-    if res == None:
+    if res is None:
         b = sql()
         b.id = ''
         return b
-    else: 
+    else:
         return res
 
+
 @router.post('/add')
-def add(item:data) -> sql:
+def add(item: data) -> sql:
     a = sql().convertFromData(item)
     db.session.add(a)
     db.session.commit()

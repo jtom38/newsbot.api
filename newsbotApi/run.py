@@ -1,12 +1,16 @@
 from os import system
-from typing import Optional
 from fastapi import FastAPI
 from fastapi_sqlalchemy import DBSessionMiddleware
 from fastapi_sqlalchemy import db
-from newsbotApi.v1 import *
-import newsbotApi.sql.sqlSchema as sqlSchema
-import newsbotApi.sql.dataSchema as dataSchema
-
+from newsbotApi.v1 import (
+    v1ArticlesRouter,
+    v1DiscordQueueRouter,
+    v1DiscordWebHooksRouter,
+    v1IconsRouter,
+    v1SettingsRouter,
+    v1SourceLinksRouter,
+    v1SourcesRouter
+)
 
 app = FastAPI()
 app.title = "Newsbot"
@@ -22,8 +26,7 @@ app.include_router(v1SourcesRouter)
 
 system("alembic upgrade head")
 
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
-

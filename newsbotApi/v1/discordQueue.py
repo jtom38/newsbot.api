@@ -1,8 +1,6 @@
 from typing import List
 from fastapi import APIRouter
 from fastapi_sqlalchemy import db
-from sqlalchemy import sql
-from newsbotApi.common.messages import *
 from newsbotApi.sql.sqlSchema import DiscordQueue as sql
 from newsbotApi.sql.dataSchema import DiscordQueue as data
 
@@ -11,11 +9,13 @@ router = APIRouter(
     tags=['DiscordQueue']
 )
 
+
 @router.get('/get/all')
 def getAll() -> List[sql]:
     res = db.session.query(sql).all()
     db.session.close()
     return res
+
 
 @router.post('/add')
 def add(item: data) -> None:
@@ -23,6 +23,7 @@ def add(item: data) -> None:
     db.session.add(a)
     db.session.commit()
     db.session.close()
+
 
 @router.get("/get/byId")
 def getById(id: str) -> sql:
@@ -32,6 +33,7 @@ def getById(id: str) -> sql:
     db.session.close()
     return res
 
+
 @router.delete('/delete/id')
 def deleteById(id: str) -> None:
     res = db.session.query(sql)\
@@ -40,4 +42,3 @@ def deleteById(id: str) -> None:
     db.session.delete(res)
     db.session.commit()
     db.session.close()
-

@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter
 from fastapi_sqlalchemy import db
-from sqlalchemy.sql.expression import true
 from newsbotApi.sql.sqlSchema import SourceLinks as sql
 from newsbotApi.sql.dataSchema import SourceLinks as data
 
@@ -10,32 +9,48 @@ router = APIRouter(
     tags=['SourceLinks']
 )
 
+
 @router.get('/get/all')
 def getAll() -> List[sql]:
     res = db.session.query(sql).all()
     db.session.close()
     return res
 
+
 @router.get('/get/all/bySourceName')
 def getAllBySourceName(sourceName: str) -> List[sql]:
     res = db.session.query(sql).filter(sql.sourceName == sourceName).first()
-    res.sourceData = db.session.query(sql).filter(sql.sourceID )
+    res.sourceData = db.session.query(sql).filter(sql.sourceID)
     db.session.close()
     return res
+
 
 @router.get('/get/all/bySourceType')
 def getAllBySourceType(sourceType: str) -> List[sql]:
-    res = db.session.query(sql).filter(sql.sourceType == sourceType).first()
+    res = db.session.query(sql)\
+        .filter(sql.sourceType == sourceType)\
+        .all()
     db.session.close()
     return res
 
+
 @router.get('/get/all/bySourceNameAndType')
-def getAllBySourceName(sourceName:str, sourceType: str) -> List[sql]:
-    res = db.session.query(sql).filter(
-        sql.sourceName == sourceName and sql.sourceType == sourceType
-        ).all()
+def getAllBySourceNameAndType(sourceName: str, sourceType: str) -> List[sql]:
+    res = db.session.query(sql)\
+        .filter(sql.sourceName == sourceName and sql.sourceType == sourceType)\
+        .all()
     db.session.close()
     return res
+
+
+@router.get('/get/byType')
+def getByType(sourceType: str) -> sql:
+    res = db.session.query(sql)\
+        .filter(sql.sourceType == sourceType) \
+        .first()
+    db.session.close()
+    return res
+
 
 @router.get('/exists')
 def exists(item: data) -> sql:
@@ -45,20 +60,22 @@ def exists(item: data) -> sql:
         .filter(sql.discordName == item.discordName) \
         .first()
     db.session.close()
-    if res == None:
+    if res is None:
         blank = sql()
-        blank.id =  ''
+        blank.id = ''
         return blank
-    else: 
+    else:
         return res
 
+
 @router.get('/get/bySourceNameAndSourceTypeAndDiscordName')
-def getAllBySourceNameAndSourceTypeAndDiscordName(sourceName:str, sourceType:str,discordName:str) -> List[sql]:
+def getAllBySourceNameAndSourceTypeAndDiscordName(sourceName: str, sourceType: str, discordName: str) -> List[sql]:
     res = db.session.query(sql).filter(
         sql.sourceName == sourceName and sql.sourceType == sourceType and sql.discordName == discordName
     ).all()
     db.session.close()
     return res
+
 
 @router.get('/get/bySourceId')
 def getBySourceId(sourceId: str) -> List[sql]:
@@ -66,11 +83,15 @@ def getBySourceId(sourceId: str) -> List[sql]:
     db.session.close()
     return res
 
-@router.get('/get/all/bySourceName')
-def getAllBySourceName(sourceName: str) -> List[sql]:
-    res = db.session.query(sql).filter(sql.sourceName == sourceName).first()
+
+@router.get('/get/bySourceName')
+def getBySourceName(sourceName: str) -> List[sql]:
+    res = db.session.query(sql)\
+        .filter(sql.sourceName == sourceName)\
+        .first()
     db.session.close()
     return res
+
 
 @router.get('/get/all/byDiscordId')
 def getAllByDiscordId(sourceId: str) -> List[sql]:
@@ -78,15 +99,17 @@ def getAllByDiscordId(sourceId: str) -> List[sql]:
     db.session.close()
     return res
 
+
 @router.post('/add')
-def add(item:data) -> None:
+def add(item: data) -> None:
     s = sql().convertFromData(item)
     db.session.add(s)
     db.session.commit()
     db.session.close()
 
+
 @router.post('/update/byId')
-def update(id: str, item:data) -> None:
+def update(id: str, item: data) -> None:
     res = db.session.query(sql).filter(sql.id == id).first()
     res.sourceID = item.sourceID
     res.sourceType = item.sourceType
@@ -95,6 +118,7 @@ def update(id: str, item:data) -> None:
     res.discordName = item.discordName
     db.session.add(res)
     db.session.commit()
+
 
 @router.delete('/delete/byId')
 def deleteById(id: str) -> None:
