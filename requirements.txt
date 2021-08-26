@@ -2,7 +2,7 @@ alembic==1.6.5
 asgiref==3.4.1
 attrs==21.2.0
 click==8.0.1
-fastapi==0.67.0
+fastapi==0.68.1
 FastAPI-SQLAlchemy==0.2.1
 flake8==3.9.2
 greenlet==1.1.0
