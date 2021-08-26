@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  newsbotDev:
+    external: true
+
+services:
+  app:
+    build: 
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
+      args:
+        VARIANT: 3
+        USER_UID: 1000
+        USER_GID: 1000
+
+    volumes:
+      - ..:/workspace:cached
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    ports:
+      - "8000:8000"
+    networks: 
+      - newsbotDev
+    
