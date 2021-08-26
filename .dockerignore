@@ -1,0 +1,11 @@
+.env
+*.db
+.git
+.devcontainer
+.github
+.vscode
+.gitignore
+archive
+tests
+Dockerfile
+*.pyc

@@ -1,10 +1,10 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-slim-bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN echo deb http://deb.debian.org/debian/ unstable main contrib non-free >> /etc/apt/sources.list && \
 	apt-get update \
-	&& apt-get install -y --fix-missing \
+	&& apt-get install libcrypt -y --fix-missing \
 	&& apt-get autoremove -y \
 	&& apt-get clean \
 	&& apt-get autoclean
