@@ -29,15 +29,17 @@ def getById(id: str) -> sql:
     return res
 
 
-@router.get('/urlExists')
+@router.get('/get/byUrl')
 def urlExists(url: str) -> sql:
     """
     Checks the DB to see if the requested url can be found in the table
     """
-    res = db.session.query(sql) \
-        .filter(sql.url == url) \
-        .first()
-    db.session.close()
+    try:
+        res = db.session.query(sql).filter(sql.url == url).first()
+    except Exception as e:
+        print(e)
+    finally:
+        db.session.close()
     if res is None:
         a = sql()
         a.id = ''

@@ -10,7 +10,7 @@ class Articles(BaseModel):
     tags: Optional[str]
     title: Optional[str]
     url: Optional[str]
-    pubDate: Optional[date]
+    pubDate: Optional[str]
     video: Optional[str]
     videoHeight: Optional[int]
     videoWidth: Optional[int]

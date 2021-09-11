@@ -21,7 +21,12 @@ def getAll() -> List[sql]:
 def getByKey(key: str) -> sql:
     res = db.session.query(sql).filter(sql.key == key).first()
     db.session.close()
-    return res
+    if res is None:
+        b = sql()
+        b.id = ''
+        return b
+    else:
+        return res
 
 
 @router.get('/find')
