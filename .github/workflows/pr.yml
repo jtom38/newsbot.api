@@ -1,7 +1,7 @@
 name: Run PR Check
 on: push
 jobs:
-  run lint:
+  run-lint:
     runs-on: ubuntu-latest
     steps:
       # Checkout the code 

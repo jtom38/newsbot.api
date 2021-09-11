@@ -54,23 +54,11 @@ def getAllByNameAndSource(name: str, source: str) -> List[sql]:
     return res
 
 
-@router.get('/get/byName')
-def getByName(name: str) -> sql:
-    res = db.session.query(sql).filter(sql.name == name).first()
-    db.session.close()
-    return res
-
-
-@router.get('/get/byId')
-def getById(id: str) -> sql:
-    res = db.session.query(sql).filter(sql.id == id).first()
-    db.session.close()
-    return res
-
-
 @router.get('/get/byNameAndSource')
-def getByNameAndType(name: str, source: str) -> sql:
-    res = db.session.query(sql).filter(sql.name == name and sql.source == source).first()
+def getByNameAndSource(name: str, source: str) -> sql:
+    res = db.session.query(sql)\
+        .filter(sql.source == source and sql.name == name)\
+        .first()
     db.session.close()
     return res
 
@@ -89,6 +77,20 @@ def getBySource(source: str) -> sql:
     res = db.session.query(sql)\
         .filter(sql.source == source)\
         .first()
+    db.session.close()
+    return res
+
+
+@router.get('/get/byName')
+def getByName(name: str) -> sql:
+    res = db.session.query(sql).filter(sql.name == name).first()
+    db.session.close()
+    return res
+
+
+@router.get('/get/byId')
+def getById(id: str) -> sql:
+    res = db.session.query(sql).filter(sql.id == id).first()
     db.session.close()
     return res
 
