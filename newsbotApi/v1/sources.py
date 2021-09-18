@@ -56,9 +56,8 @@ def getAllByNameAndSource(name: str, source: str) -> List[sql]:
 
 @router.get('/get/byNameAndSource')
 def getByNameAndSource(name: str, source: str) -> sql:
-    res = db.session.query(sql)\
-        .filter(sql.source == source and sql.name == name)\
-        .first()
+    res = db.session.query(sql).filter(sql.source == source, sql.name == name)\
+            .first()
     db.session.close()
     return res
 
@@ -66,7 +65,7 @@ def getByNameAndSource(name: str, source: str) -> sql:
 @router.get('/get/byNameSourceType')
 def getByNameSourceType(name: str, source: str, type: str) -> sql:
     res = db.session.query(sql)\
-        .filter(sql.name == name and sql.type == type and sql.source == source)\
+        .filter(sql.name == name, sql.type == type, sql.source == source)\
         .first()
     db.session.close()
     return res
